@@ -47,7 +47,6 @@ struct ContentView: View {
                     if let window = windows.first {
                         print(window.frame)
                         print(window.windowName)
-                        print(window.windowIsOnscreen)
                     }
                 }, label: {
                     Text("ShowInfo")
@@ -99,24 +98,24 @@ struct ContentView_Previews: PreviewProvider {
 
 struct Window: Identifiable {
     
-    fileprivate(set) var id: CGWindowID = 0
-    fileprivate(set) var name: String!
-    fileprivate(set) var windowName: String!
-    fileprivate(set) var frame: CGRect!
-    fileprivate(set) var windowIsOnscreen: Bool!
-    fileprivate(set) var image: NSImage!
-    
+    fileprivate(set) var id: UUID = UUID()
+    fileprivate(set) var windowId: CGWindowID
+    fileprivate(set) var name: String
+    fileprivate(set) var windowName: String
+    fileprivate(set) var frame: CGRect
     
     init?(with windowInfo: NSDictionary) {
-        let windowAlpha = windowInfo[Window.convert(CFString: kCGWindowAlpha)]
-        let alpha = windowAlpha != nil ? (windowAlpha as! NSNumber).intValue : 0
-        let windowBounds = windowInfo[Window.convert(CFString: kCGWindowBounds)]
-        let bounds = windowBounds != nil ? CGRect(dictionaryRepresentation: windowBounds as! CFDictionary) ?? .zero : .zero
-        let ownerName = windowInfo[Window.convert(CFString: kCGWindowOwnerName)]
-        let name = ownerName != nil ? Window.convert(CFString: ownerName as! CFString) : ""  // CFString -> Stringの変換？
-        let windowId = windowInfo[Window.convert(CFString: kCGWindowNumber)]
-        let id = windowId != nil ? Window.convert(CFNumber: windowId as! CFNumber) : 0
-        let image = NSImage.windowImage(with: id)
+        let _windowAlpha = windowInfo[Window.convert(CFString: kCGWindowAlpha)]
+        let windowAlpha = _windowAlpha != nil ? (_windowAlpha as! NSNumber).intValue : 0
+
+        let _windowBounds = windowInfo[Window.convert(CFString: kCGWindowBounds)]
+        let windowBounds = _windowBounds != nil ? CGRect(dictionaryRepresentation: _windowBounds as! CFDictionary) ?? .zero : .zero
+
+        let _ownerName = windowInfo[Window.convert(CFString: kCGWindowOwnerName)]
+        let ownerName = _ownerName != nil ? Window.convert(CFString: _ownerName as! CFString) : ""  // CFString -> Stringの変換？
+        
+        let _windowId = windowInfo[Window.convert(CFString: kCGWindowNumber)]
+        let windowId = _windowId != nil ? Window.convert(CFNumber: _windowId as! CFNumber) : 0
         
         let _windowName = windowInfo[Window.convert(CFString: kCGWindowName)]
         let windowName = _windowName != nil ? Window.convert(CFString: _windowName as! CFString) : ""
@@ -125,23 +124,21 @@ struct Window: Identifiable {
         let windowIsOnscreen = _windowIsOnscreen != nil ? Window.convert(CFBoolean: _windowIsOnscreen as! CFBoolean) : false
         
         guard
-            alpha > 0,
-            bounds.width > 100,
-            bounds.height > 100,
-            image.size.width > 1,
-            image.size.height > 1,
-            name == "CotEditor.app",  // DEBUGGING
-            name != "Dock",
-            name != "Window Server" else {
+            windowAlpha > 0,
+            windowBounds.width > 10,
+            windowBounds.height > 10,
+            ownerName == "CotEditor.app",  // DEBUGGING
+            ownerName != "Dock",
+            ownerName != "Window Server",
+            windowIsOnscreen
+        else {
             return nil
         }
         
-        self.id = id
-        self.name = name
+        self.windowId = windowId
+        self.name = ownerName
         self.windowName = windowName
-        self.frame = bounds
-        self.image = image
-        self.windowIsOnscreen = windowIsOnscreen
+        self.frame = windowBounds
     }
     
     static func convert(CFString: CFString) -> String {
