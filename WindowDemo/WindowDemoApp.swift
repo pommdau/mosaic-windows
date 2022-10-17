@@ -6,7 +6,24 @@ struct WindowDemoApp: App {
         WindowGroup {
             ContentView()
                 .frame(minWidth: 200, minHeight: 200)
-                .navigationTitle("Undecorated")                            
+                .navigationTitle("Undecorated")
+                .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+                    guard let window = NSApp.mainWindow else {
+                        return
+                    }
+                    
+                    window.standardWindowButton(.zoomButton)?.isHidden = true
+                    window.standardWindowButton(.closeButton)?.isHidden = true
+                    window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+                    
+//                    window.titleVisibility = .hidden
+                    window.titlebarAppearsTransparent = true
+                    
+                    window.isOpaque = true
+                    window.hasShadow = false
+                    window.backgroundColor = NSColor(.blue).withAlphaComponent(0.5)
+                    
+                }
         }
     }
 }

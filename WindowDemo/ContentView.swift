@@ -12,23 +12,43 @@ struct ContentView: View {
     
     @State private var windows: [Window] = []
     
+    var menuBarHeight: CGFloat {
+        guard let menuBarHeight = NSApplication.shared.mainMenu?.menuBarHeight else {
+            return 0
+        }
+        
+        return menuBarHeight - 4  // 謎のマージン。メニューバーの高さの補間自体が怪しい可能性も…。
+    }
+    
     var body: some View {
-        VStack {
-            Button(action: {
-                getWindowInfo()
-            }, label: {
-                Text("Debugging")
-            })
-            .onAppear() {
-                getWindowInfo()
-            }
-                        
-            Button(action: {
-                print(windows.first)
-            }, label: {
-                Text("ShowInfo")
-            })
+        
+        ZStack {
             
+            ForEach(windows) { window in
+                Rectangle()
+                    .foregroundColor(.red.opacity(0.3))
+                    .frame(width: window.frame.width, height: window.frame.height)
+                    .position(.init(x: window.frame.origin.x + window.frame.width / 2,
+                                    y: window.frame.origin.y + window.frame.height / 2 - menuBarHeight * 2))
+            }
+            
+            VStack {
+                Button(action: {
+                    getWindowInfo()
+                }, label: {
+                    Text("Debugging")
+                })
+                .onAppear() {
+                    getWindowInfo()
+                }
+                
+                Button(action: {
+//                    print(windows.first?.frame)
+                }, label: {
+                    Text("ShowInfo")
+                })
+                
+            }
         }
         
     }
@@ -36,7 +56,7 @@ struct ContentView: View {
     private func getWindowInfo() {
         
         //            windows.removeAll()
-        if let windowInfos = CGWindowListCopyWindowInfo([.optionOnScreenAboveWindow], kCGNullWindowID) {
+        if let windowInfos = CGWindowListCopyWindowInfo([.optionAll], 0) {
             for windowInfo in windowInfos as NSArray {
                 if let info = windowInfo as? NSDictionary,
                                let window = Window(with: info) {
@@ -71,11 +91,14 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-class Window {
+
+struct Window: Identifiable {
     
     fileprivate(set) var id: CGWindowID = 0
     fileprivate(set) var name: String!
+    fileprivate(set) var frame: CGRect!
     fileprivate(set) var image: NSImage!
+    
     
     init?(with windowInfo: NSDictionary) {
         let windowAlpha = windowInfo[Window.convert(CFString: kCGWindowAlpha)]
@@ -83,7 +106,7 @@ class Window {
         let windowBounds = windowInfo[Window.convert(CFString: kCGWindowBounds)]
         let bounds = windowBounds != nil ? CGRect(dictionaryRepresentation: windowBounds as! CFDictionary) ?? .zero : .zero
         let ownerName = windowInfo[Window.convert(CFString: kCGWindowOwnerName)]
-        let name = ownerName != nil ? Window.convert(CFString: ownerName as! CFString) : ""
+        let name = ownerName != nil ? Window.convert(CFString: ownerName as! CFString) : ""  // CFString -> Stringの変換？
         let windowId = windowInfo[Window.convert(CFString: kCGWindowNumber)]
         let id = windowId != nil ? Window.convert(CFNumber: windowId as! CFNumber) : 0
         let image = NSImage.windowImage(with: id)
@@ -94,7 +117,7 @@ class Window {
             bounds.height > 100,
             image.size.width > 1,
             image.size.height > 1,
-            name == "Xcode",  // DEBUGGING
+            name == "CotEditor.app",  // DEBUGGING
             name != "Dock",
             name != "Window Server" else {
             return nil
@@ -102,6 +125,7 @@ class Window {
         
         self.id = id
         self.name = name
+        self.frame = bounds
         self.image = image
     }
     
