@@ -43,7 +43,12 @@ struct ContentView: View {
                 }
                 
                 Button(action: {
-//                    print(windows.first?.frame)
+                    
+                    if let window = windows.first {
+                        print(window.frame)
+                        print(window.windowName)
+                        print(window.windowIsOnscreen)
+                    }
                 }, label: {
                     Text("ShowInfo")
                 })
@@ -55,11 +60,11 @@ struct ContentView: View {
     
     private func getWindowInfo() {
         
-        //            windows.removeAll()
+        windows.removeAll()
         if let windowInfos = CGWindowListCopyWindowInfo([.optionAll], 0) {
             for windowInfo in windowInfos as NSArray {
                 if let info = windowInfo as? NSDictionary,
-                               let window = Window(with: info) {
+                   let window = Window(with: info) {
                     print(info)
                     windows.append(window)
                 }
@@ -67,22 +72,22 @@ struct ContentView: View {
         }
     }
     
-    private func copyAttributeValue(_ element: AXUIElement, attribute: String) -> CFTypeRef? {
-        var ref: CFTypeRef? = nil
-        let error = AXUIElementCopyAttributeValue(element, attribute as CFString, &ref)
-        if error == .success {
-            return ref
-        }
-        return .none
-    }
-    
-    private func getFocusedWindow(pid: pid_t) -> AXUIElement? {
-        let element = AXUIElementCreateApplication(pid)
-        if let window = self.copyAttributeValue(element, attribute: kAXFocusedWindowAttribute) {
-            return (window as! AXUIElement)
-        }
-        return nil
-    }
+//    private func copyAttributeValue(_ element: AXUIElement, attribute: String) -> CFTypeRef? {
+//        var ref: CFTypeRef? = nil
+//        let error = AXUIElementCopyAttributeValue(element, attribute as CFString, &ref)
+//        if error == .success {
+//            return ref
+//        }
+//        return .none
+//    }
+//
+//    private func getFocusedWindow(pid: pid_t) -> AXUIElement? {
+//        let element = AXUIElementCreateApplication(pid)
+//        if let window = self.copyAttributeValue(element, attribute: kAXFocusedWindowAttribute) {
+//            return (window as! AXUIElement)
+//        }
+//        return nil
+//    }
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -96,7 +101,9 @@ struct Window: Identifiable {
     
     fileprivate(set) var id: CGWindowID = 0
     fileprivate(set) var name: String!
+    fileprivate(set) var windowName: String!
     fileprivate(set) var frame: CGRect!
+    fileprivate(set) var windowIsOnscreen: Bool!
     fileprivate(set) var image: NSImage!
     
     
@@ -110,6 +117,12 @@ struct Window: Identifiable {
         let windowId = windowInfo[Window.convert(CFString: kCGWindowNumber)]
         let id = windowId != nil ? Window.convert(CFNumber: windowId as! CFNumber) : 0
         let image = NSImage.windowImage(with: id)
+        
+        let _windowName = windowInfo[Window.convert(CFString: kCGWindowName)]
+        let windowName = _windowName != nil ? Window.convert(CFString: _windowName as! CFString) : ""
+        
+        let _windowIsOnscreen = windowInfo[Window.convert(CFString: kCGWindowIsOnscreen)]
+        let windowIsOnscreen = _windowIsOnscreen != nil ? Window.convert(CFBoolean: _windowIsOnscreen as! CFBoolean) : false
         
         guard
             alpha > 0,
@@ -125,8 +138,10 @@ struct Window: Identifiable {
         
         self.id = id
         self.name = name
+        self.windowName = windowName
         self.frame = bounds
         self.image = image
+        self.windowIsOnscreen = windowIsOnscreen
     }
     
     static func convert(CFString: CFString) -> String {
@@ -135,6 +150,10 @@ struct Window: Identifiable {
     
     static func convert(CFNumber: CFNumber) -> CGWindowID {
         return CFNumber as! CGWindowID
+    }
+    
+    static func convert(CFBoolean: CFBoolean) -> Bool {
+        return CFBoolean as! Bool
     }
 }
 
