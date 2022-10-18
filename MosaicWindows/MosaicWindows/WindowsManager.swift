@@ -13,6 +13,8 @@ struct WindowsManager {
         
     func loadWindowsInfo() -> [Window] {
         
+        CGRequestScreenCaptureAccess()
+        
         var windows = [Window]()
         
         guard let windowsInfo = CGWindowListCopyWindowInfo([.optionOnScreenOnly], 0) else {
@@ -36,7 +38,7 @@ struct WindowsManager {
     
     private func isTarget(withWindow window: Window) -> Bool {
         guard
-//            window.windowAlpha > 0,
+            window.windowAlpha > 0,
             window.windowBounds.width > 10, window.windowBounds.height > 10,
             window.windowOwnerName == "CotEditor.app",  // Debugging
             window.windowOwnerName != "Dock",
