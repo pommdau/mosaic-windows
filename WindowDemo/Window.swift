@@ -43,7 +43,7 @@ struct Window: Identifiable {
             windowBounds.width > 10,
             windowBounds.height > 10,
 //            ownerName == "CotEditor.app" || ownerName == "Xcode" ,  // DEBUGGING
-            ownerName == "CotEditor.app",
+            ownerName == "CotEditor.app",  // DEBUGGING
             ownerName != "Dock",
             ownerName != "Window Server",
             windowIsOnscreen

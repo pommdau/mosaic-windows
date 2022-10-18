@@ -96,7 +96,6 @@ struct ContentView: View {
     
     private func updateWindowInfo() {
         windows.removeAll()
-//        if let windowInfos = CGWindowListCopyWindowInfo([.optionAll], 0) {
         if let windowInfos = CGWindowListCopyWindowInfo([.optionOnScreenOnly], 0) {
             for windowInfo in windowInfos as NSArray {
                 if let info = windowInfo as? NSDictionary,
@@ -106,23 +105,6 @@ struct ContentView: View {
             }
         }
     }
-    
-//    private func copyAttributeValue(_ element: AXUIElement, attribute: String) -> CFTypeRef? {
-//        var ref: CFTypeRef? = nil
-//        let error = AXUIElementCopyAttributeValue(element, attribute as CFString, &ref)
-//        if error == .success {
-//            return ref
-//        }
-//        return .none
-//    }
-//
-//    private func getFocusedWindow(pid: pid_t) -> AXUIElement? {
-//        let element = AXUIElementCreateApplication(pid)
-//        if let window = self.copyAttributeValue(element, attribute: kAXFocusedWindowAttribute) {
-//            return (window as! AXUIElement)
-//        }
-//        return nil
-//    }
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -130,5 +112,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-
-
