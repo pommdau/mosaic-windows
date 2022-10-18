@@ -92,6 +92,7 @@ struct Window: Identifiable {
     
     init(with windowInfo: NSDictionary) {
         self.windowInfo = windowInfo
+        // TODO: id
     }
 }
 

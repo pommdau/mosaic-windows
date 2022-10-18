@@ -14,19 +14,18 @@ struct ContentView: View {
     var body: some View {
         VStack {
             Button("Get Info") {
-                windows.removeAll()
-                if let windowInfos = CGWindowListCopyWindowInfo([.optionOnScreenOnly], 0) {
-                    for windowInfo in windowInfos as NSArray {
-                        if let info = windowInfo as? NSDictionary {
-                            let window = Window(with: info)
-                            print(window.ikehDebugDescription)
-                            windows.insert(window, at: windows.endIndex)
-                        }
-                    }
+                windows = WindowsManager.shared.loadWindowsInfo()
+            }
+            
+            Button("Print Info") {
+                for window in windows {
+                    print(window.ikehDebugDescription)
                 }
             }
         }
-        .padding()
+        .onAppear() {
+            windows = WindowsManager.shared.loadWindowsInfo()
+        }
     }
 }
 
