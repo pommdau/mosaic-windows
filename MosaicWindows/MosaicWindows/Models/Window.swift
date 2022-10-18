@@ -14,7 +14,8 @@ struct Window: Identifiable {
     
     var windowAlpha: Int {
         guard let windowAlpha = windowInfo[kCGWindowAlpha as String] as? Int else {
-            fatalError()
+//            fatalError()
+            return 0
         }
         return windowAlpha
     }
