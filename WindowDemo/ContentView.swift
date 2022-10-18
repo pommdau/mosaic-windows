@@ -100,6 +100,7 @@ struct ContentView: View {
             for windowInfo in windowInfos as NSArray {
                 if let info = windowInfo as? NSDictionary,
                    let window = Window(with: info) {
+                    print(windowInfo)
                     windows.insert(window, at: windows.endIndex)
                 }
             }
