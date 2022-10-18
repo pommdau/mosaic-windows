@@ -8,9 +8,32 @@
 import SwiftUI
 import AVFAudio
 
+struct GlassBackGround: View {
+
+    let width: CGFloat
+    let height: CGFloat
+    let color: Color
+
+    var body: some View {
+        ZStack{
+            RadialGradient(colors: [.clear, color],
+                           center: .center,
+                           startRadius: 1,
+                           endRadius: 100)
+                .opacity(0.6)
+            Rectangle().foregroundColor(color)
+        }
+        .opacity(0.2)
+        .blur(radius: 2)
+        .cornerRadius(10)
+        .frame(width: width, height: height)
+    }
+}
+
 struct ContentView: View {
     
     @State private var windows: [Window] = []
+    @State private var timer: Timer? = nil
     
     var menuBarHeight: CGFloat {
         guard let menuBarHeight = NSApplication.shared.mainMenu?.menuBarHeight else {
@@ -26,7 +49,7 @@ struct ContentView: View {
             
             ForEach(windows) { window in
                 Rectangle()
-                    .foregroundColor(.red.opacity(0.3))
+                    .foregroundColor(.black.opacity(0.1))
                     .frame(width: window.frame.width, height: window.frame.height)
                     .position(.init(x: window.frame.origin.x + window.frame.width / 2,
                                     y: window.frame.origin.y + window.frame.height / 2 - menuBarHeight * 2))
@@ -34,38 +57,51 @@ struct ContentView: View {
             
             VStack {
                 Button(action: {
-                    getWindowInfo()
-                }, label: {
-                    Text("Debugging")
-                })
-                .onAppear() {
-                    getWindowInfo()
-                }
-                
-                Button(action: {
-                    
-                    if let window = windows.first {
-                        print(window.frame)
-                        print(window.windowName)
+//                    updateWindowInfo()
+                    for window in windows {
+                        print("\(window.windowName): \(window.windowLayer)")
                     }
                 }, label: {
-                    Text("ShowInfo")
+                    Text("Print")
+                })
+                
+                Button(action: {
+//                    startTimer()
+                    updateWindowInfo()
+                }, label: {
+                    Text("UpdateInfo")
                 })
                 
             }
         }
-        
+        .onAppear() {
+            updateWindowInfo()
+//            startTimer()
+        }
+        .onDisappear() {
+            stopTimer()
+        }
     }
     
-    private func getWindowInfo() {
-        
+    private func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+            updateWindowInfo()
+        }
+    }
+    
+    private func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    private func updateWindowInfo() {
         windows.removeAll()
-        if let windowInfos = CGWindowListCopyWindowInfo([.optionAll], 0) {
+//        if let windowInfos = CGWindowListCopyWindowInfo([.optionAll], 0) {
+        if let windowInfos = CGWindowListCopyWindowInfo([.optionOnScreenOnly], 0) {
             for windowInfo in windowInfos as NSArray {
                 if let info = windowInfo as? NSDictionary,
                    let window = Window(with: info) {
-                    print(info)
-                    windows.append(window)
+                    windows.insert(window, at: windows.endIndex)
                 }
             }
         }
@@ -96,73 +132,3 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 
-struct Window: Identifiable {
-    
-    fileprivate(set) var id: UUID = UUID()
-    fileprivate(set) var windowId: CGWindowID
-    fileprivate(set) var name: String
-    fileprivate(set) var windowName: String
-    fileprivate(set) var frame: CGRect
-    
-    init?(with windowInfo: NSDictionary) {
-        let _windowAlpha = windowInfo[Window.convert(CFString: kCGWindowAlpha)]
-        let windowAlpha = _windowAlpha != nil ? (_windowAlpha as! NSNumber).intValue : 0
-
-        let _windowBounds = windowInfo[Window.convert(CFString: kCGWindowBounds)]
-        let windowBounds = _windowBounds != nil ? CGRect(dictionaryRepresentation: _windowBounds as! CFDictionary) ?? .zero : .zero
-
-        let _ownerName = windowInfo[Window.convert(CFString: kCGWindowOwnerName)]
-        let ownerName = _ownerName != nil ? Window.convert(CFString: _ownerName as! CFString) : ""  // CFString -> Stringの変換？
-        
-        let _windowId = windowInfo[Window.convert(CFString: kCGWindowNumber)]
-        let windowId = _windowId != nil ? Window.convert(CFNumber: _windowId as! CFNumber) : 0
-        
-        let _windowName = windowInfo[Window.convert(CFString: kCGWindowName)]
-        let windowName = _windowName != nil ? Window.convert(CFString: _windowName as! CFString) : ""
-        
-        let _windowIsOnscreen = windowInfo[Window.convert(CFString: kCGWindowIsOnscreen)]
-        let windowIsOnscreen = _windowIsOnscreen != nil ? Window.convert(CFBoolean: _windowIsOnscreen as! CFBoolean) : false
-        
-        guard
-            windowAlpha > 0,
-            windowBounds.width > 10,
-            windowBounds.height > 10,
-            ownerName == "CotEditor.app",  // DEBUGGING
-            ownerName != "Dock",
-            ownerName != "Window Server",
-            windowIsOnscreen
-        else {
-            return nil
-        }
-        
-        self.windowId = windowId
-        self.name = ownerName
-        self.windowName = windowName
-        self.frame = windowBounds
-    }
-    
-    static func convert(CFString: CFString) -> String {
-        return CFString as String
-    }
-    
-    static func convert(CFNumber: CFNumber) -> CGWindowID {
-        return CFNumber as! CGWindowID
-    }
-    
-    static func convert(CFBoolean: CFBoolean) -> Bool {
-        return CFBoolean as! Bool
-    }
-}
-
-private extension NSImage {
-    class func windowImage(with windowId: CGWindowID) -> NSImage {
-        if let screenShot = CGWindowListCreateImage(CGRect.null, .optionIncludingWindow, CGWindowID(windowId), CGWindowImageOption()) {
-            let bitmapRep = NSBitmapImageRep(cgImage: screenShot)
-            let image = NSImage()
-            image.addRepresentation(bitmapRep)
-            return image
-        } else {
-            return NSImage()
-        }
-    }
-}

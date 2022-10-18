@@ -19,9 +19,13 @@ struct WindowDemoApp: App {
 //                    window.titleVisibility = .hidden
                     window.titlebarAppearsTransparent = true
                     
+//                    window.level = .screenSaver
+//                    window.ignoresMouseEvents = true
+                    
                     window.isOpaque = true
                     window.hasShadow = false
-                    window.backgroundColor = NSColor(.blue).withAlphaComponent(0.5)
+//                    window.backgroundColor = NSColor(.blue).withAlphaComponent(0.2)
+                    window.backgroundColor = NSColor(.blue).withAlphaComponent(0.01)
                     
                 }
         }
