@@ -9,22 +9,57 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var windows: [Window] = []
+    @StateObject private var viewModel: ContentViewModel = .init()
+    
+    private var menuBarHeight: CGFloat {
+        guard let menuBarHeight = NSApplication.shared.mainMenu?.menuBarHeight else {
+            return 0
+        }
+        return menuBarHeight - 4  // 謎のマージン。メニューバーの高さの補間自体が怪しい可能性も…。
+    }
     
     var body: some View {
+        ZStack {
+//            Color.red.opacity(0.4)
+            
+            MosaicViews()
+//            DebugButtons()
+        }
+        .onAppear() {
+            viewModel.startTimer()
+            viewModel.updateWindows()
+        }
+        .onDisappear() {
+            viewModel.stopTimer()
+        }
+    }
+    
+    @ViewBuilder
+    private func MosaicViews() -> some View {
+        ForEach(viewModel.windows) { window in            
+            if window.windowOwnerName == "CotEditor.app"  {
+                let windowBounds = window.windowBounds
+                Rectangle()
+                    .foregroundColor(.green.opacity(0.8))
+                    .frame(width: windowBounds.width, height: windowBounds.height)
+                    .position(.init(x: windowBounds.origin.x + windowBounds.width / 2,
+                                    y: windowBounds.origin.y + windowBounds.height / 2 - menuBarHeight * 2))
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func DebugButtons() -> some View {
         VStack {
-            Button("Get Info") {
-                windows = WindowsManager.shared.loadWindowsInfo()
+            Button("Update windows") {
+                viewModel.updateWindows()
             }
             
             Button("Print Info") {
-                for window in windows {
+                for window in viewModel.windows {
                     print(window.ikehDebugDescription)
                 }
             }
-        }
-        .onAppear() {
-            windows = WindowsManager.shared.loadWindowsInfo()
         }
     }
 }

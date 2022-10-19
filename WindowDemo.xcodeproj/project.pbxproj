@@ -16,6 +16,7 @@
 
 /* Begin PBXFileReference section */
 		DA23361B28FD60B400AF168C /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
+		DABC538328FE7C4D003FA4B6 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DABF2B5728FCF7E000005F9B /* WindowDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WindowDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DABF2B5A28FCF7E000005F9B /* WindowDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDemoApp.swift; sourceTree = "<group>"; };
 		DABF2B5C28FCF7E000005F9B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,6 +61,7 @@
 				DABF2B5E28FCF7E100005F9B /* Assets.xcassets */,
 				DABF2B6328FCF7E100005F9B /* WindowDemo.entitlements */,
 				DABF2B6028FCF7E100005F9B /* Preview Content */,
+				DABC538328FE7C4D003FA4B6 /* README.md */,
 			);
 			path = WindowDemo;
 			sourceTree = "<group>";
