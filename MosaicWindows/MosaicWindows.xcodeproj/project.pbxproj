@@ -61,8 +61,8 @@
 				DABC536E28FE482F003FA4B6 /* MosaicWindowsApp.swift */,
 				DABC537028FE482F003FA4B6 /* ContentView.swift */,
 				DABC538828FFE34C003FA4B6 /* ContentViewModel.swift */,
-				DABC537D28FE4849003FA4B6 /* Models */,
 				DABC538128FE6E8D003FA4B6 /* WindowsManager.swift */,
+				DABC537F28FE48BF003FA4B6 /* Window.swift */,
 				DABC537228FE4830003FA4B6 /* Assets.xcassets */,
 				DABC537728FE4830003FA4B6 /* MosaicWindows.entitlements */,
 				DABC537428FE4830003FA4B6 /* Preview Content */,
@@ -76,14 +76,6 @@
 				DABC537528FE4830003FA4B6 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		DABC537D28FE4849003FA4B6 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				DABC537F28FE48BF003FA4B6 /* Window.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
