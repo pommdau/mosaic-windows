@@ -9,25 +9,51 @@ import Foundation
 
 struct Window: Identifiable {
     
-    let id: UUID = UUID()
-    private var windowInfo: NSDictionary
+    let id: Int
+    var windowAlpha: Int
+    var windowIsOnscreen: Bool
+    var windowBounds: CGRect
+    var windowLayer: Int
+    var windowMemoryUsage: Int
+    var windowName: String
+    var windowOwnerName: String
+    var windowOwnerPID: Int
+    var windowSharingState: Int
+    var windowStoreType: Int
+        
+    init(with windowInfo: NSDictionary) {
+        self.id = Self.windowNumber(with: windowInfo)
+        self.windowAlpha = Self.windowAlpha(with: windowInfo)
+        self.windowIsOnscreen = Self.windowIsOnscreen(with: windowInfo)
+        self.windowBounds = Self.windowBounds(with: windowInfo)
+        self.windowLayer = Self.windowLayer(with: windowInfo)
+        self.windowMemoryUsage = Self.windowMemoryUsage(with: windowInfo)
+        self.windowName = Self.windowName(with: windowInfo)
+        self.windowOwnerName = Self.windowOwnerName(with: windowInfo)
+        self.windowOwnerPID = Self.windowOwnerPID(with: windowInfo)
+        self.windowSharingState = Self.windowSharingState(with: windowInfo)
+        self.windowStoreType = Self.windowStoreType(with: windowInfo)
+    }
+}
+
+extension Window {
     
-    var windowAlpha: Int {
+    static func windowAlpha(with windowInfo: NSDictionary) -> Int {
         guard let windowAlpha = windowInfo[kCGWindowAlpha as String] as? Int else {
-//            fatalError()
+//            fatalError()  // なんか取れない場合がある
             return 0
         }
         return windowAlpha
     }
     
-    var windowIsOnscreen: Bool {
+    static func windowIsOnscreen(with windowInfo: NSDictionary) -> Bool {
         guard let windowIsOnscreen = windowInfo[kCGWindowIsOnscreen as String] as? Bool else {
             fatalError()
         }
         return windowIsOnscreen
     }
     
-    var windowBounds: CGRect {
+    static func windowBounds(with windowInfo: NSDictionary) -> CGRect {
         let _windowBounds: CFDictionary = windowInfo[kCGWindowBounds as String] as! CFDictionary
         guard let windowBounds = CGRect(dictionaryRepresentation: _windowBounds) else {
             fatalError()
@@ -35,65 +61,60 @@ struct Window: Identifiable {
         return windowBounds
     }
     
-    var windowLayer: Int {
+    static func windowLayer(with windowInfo: NSDictionary) -> Int {
         guard let windowLayer = windowInfo[kCGWindowLayer as String] as? Int else {
             return 0
         }
         return windowLayer
     }
     
-    var windowMemoryUsage: Int {
+    static func windowMemoryUsage(with windowInfo: NSDictionary) -> Int {
         guard let windowMemoryUsage = windowInfo[kCGWindowMemoryUsage as String] as? Int else {
             fatalError()
         }
         return windowMemoryUsage
     }
     
-    var windowName: String {
+    static func windowName(with windowInfo: NSDictionary) -> String {
         guard let windowName = windowInfo[kCGWindowName as String] as? String else {
             return ""  // 権限がない場合に取得できない
         }
         return windowName
     }
     
-    var windowNumber: Int {
+    static func windowNumber(with windowInfo: NSDictionary) -> Int {
         guard let windowNumber = windowInfo[kCGWindowNumber as String] as? Int else {
             fatalError()
         }
         return windowNumber
     }
     
-    var windowOwnerName: String {
+    static func windowOwnerName(with windowInfo: NSDictionary) -> String {
         guard let windowOwnerName = windowInfo[kCGWindowOwnerName as String] as? String else {
             fatalError()
         }
         return windowOwnerName
     }
     
-    var windowOwnerPID: Int {
+    static func windowOwnerPID(with windowInfo: NSDictionary) -> Int {
         guard let windowOwnerPID = windowInfo[kCGWindowOwnerPID as String] as? Int else {
             fatalError()
         }
         return windowOwnerPID
     }
     
-    var windowSharingState: Int {
+    static func windowSharingState(with windowInfo: NSDictionary) -> Int {
         guard let windowSharingState = windowInfo[kCGWindowSharingState as String] as? Int else {
             fatalError()
         }
         return windowSharingState
     }
     
-    var windowStoreType: Int {
+    static func windowStoreType(with windowInfo: NSDictionary) -> Int {
         guard let windowStoreType = windowInfo[kCGWindowStoreType as String] as? Int else {
             fatalError()
         }
         return windowStoreType
-    }
-    
-    init(with windowInfo: NSDictionary) {
-        self.windowInfo = windowInfo
-        // TODO: id
     }
 }
 
@@ -107,12 +128,11 @@ windowBounds = \(windowBounds)
 windowLayer = \(windowLayer)
 windowMemoryUsage = \(windowMemoryUsage)
 windowName = \(windowName)
-windowNumber = \(windowNumber)
+windowNumber = \(id)
 windowOwnerName = \(windowOwnerName)
 windowOwnerPID = \(windowOwnerPID)
 windowSharingState = \(windowSharingState)
 windowStoreType = \(windowStoreType)
-
 """
     }
     

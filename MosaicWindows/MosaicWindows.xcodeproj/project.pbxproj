@@ -61,11 +61,10 @@
 		DABC536D28FE482F003FA4B6 /* MosaicWindows */ = {
 			isa = PBXGroup;
 			children = (
-				DABC537E28FE484E003FA4B6 /* Views */,
-				DABC537D28FE4849003FA4B6 /* Models */,
 				DABC536E28FE482F003FA4B6 /* MosaicWindowsApp.swift */,
-				DABC538128FE6E8D003FA4B6 /* WindowsManager.swift */,
 				DABC537028FE482F003FA4B6 /* ContentView.swift */,
+				DABC537D28FE4849003FA4B6 /* Models */,
+				DABC538128FE6E8D003FA4B6 /* WindowsManager.swift */,
 				DABC537228FE4830003FA4B6 /* Assets.xcassets */,
 				DABC537728FE4830003FA4B6 /* MosaicWindows.entitlements */,
 				DABC537428FE4830003FA4B6 /* Preview Content */,
@@ -88,13 +87,6 @@
 				DABC538628FFD0C3003FA4B6 /* WindowFrame.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		DABC537E28FE484E003FA4B6 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
