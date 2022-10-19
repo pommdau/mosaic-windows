@@ -23,31 +23,33 @@ final class ContentViewModel: ObservableObject {
         timer = nil
     }
     
-    func addWindow(targetWindow: Window, in windows: [Window]) -> [Window] {
+    // 他のウインドウに覆われていないかどうか
+    private func isNotCoverdWindow(withWindow targetWindow: Window, in windows: [Window]) -> Bool {
         for window in windows {
             if window.windowBounds.contains(targetWindow.windowBounds) {
-                return windows
+                return false
             }
         }
         
-        return windows + [targetWindow]
+        return true
     }
     
     func updateWindows() {
-//        windows = WindowsManager.shared.loadWindowsInfo()
         let _newWindows = WindowsManager.shared.loadWindowsInfo()
         var newWindows = [Window]()
         for _newWindow in _newWindows {
-            newWindows = addWindow(targetWindow: _newWindow, in: newWindows)
+            if isNotCoverdWindow(withWindow: _newWindow, in: newWindows) {
+                newWindows.append(_newWindow)
+            }
         }
         
         if newWindows == windows {
             print("no change")
             return
-        } else {
-            print("window changed!")
-            windows = newWindows
         }
+        
+        print("window changed!")
+        windows = newWindows
 //
 //        newWindows.forEach { newWindow in
 //            if let currentWindowIndex = windows.firstIndex(where: { $0.id == newWindow.id }) {
