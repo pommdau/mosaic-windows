@@ -9,8 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var windows: [Window] = []
-    @State private var timer: Timer? = nil
+    @StateObject private var viewModel: ContentViewModel = .init()
     
     private var menuBarHeight: CGFloat {
         guard let menuBarHeight = NSApplication.shared.mainMenu?.menuBarHeight else {
@@ -25,31 +24,19 @@ struct ContentView: View {
             DebugButtons()
         }
         .onAppear() {
-            startTimer()
+//            viewModel.startTimer()
+            viewModel.updateWindows()
         }
         .onDisappear() {
-            stopTimer()
+//            viewModel.stopTimer()
         }
     }
     
-    private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1/30, repeats: true) { _ in
-            updateWindows()
-        }
-    }
     
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-    
-    private func updateWindows() {
-        windows = WindowsManager.shared.loadWindowsInfo()
-    }
     
     @ViewBuilder
     private func MosaicViews() -> some View {
-        ForEach(windows) { window in
+        ForEach(viewModel.windows) { window in
             let windowBounds = window.windowBounds
             Rectangle()
                 .foregroundColor(.black.opacity(0.2))
@@ -62,18 +49,15 @@ struct ContentView: View {
     @ViewBuilder
     private func DebugButtons() -> some View {
         VStack {
-            Button("Get Info") {
-                updateWindows()
+            Button("Update windows") {
+                viewModel.updateWindows()
             }
             
             Button("Print Info") {
-                for window in windows {
+                for window in viewModel.windows {
                     print(window.ikehDebugDescription)
                 }
             }
-        }
-        .onAppear() {
-            windows = WindowsManager.shared.loadWindowsInfo()
         }
     }
 }

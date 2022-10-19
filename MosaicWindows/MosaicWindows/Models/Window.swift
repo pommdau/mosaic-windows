@@ -9,7 +9,7 @@ import Foundation
 
 struct Window: Identifiable {
     
-    let id: Int
+    let id: Int  // windowNumber
     var windowAlpha: Int
     var windowIsOnscreen: Bool
     var windowBounds: CGRect

@@ -11,10 +11,12 @@ struct WindowsManager {
     
     static let shared: WindowsManager = .init()
         
+    init() {
+        CGRequestScreenCaptureAccess()  // WindowNameを取得するために許可が必要
+    }
+    
     func loadWindowsInfo() -> [Window] {
-        
-        CGRequestScreenCaptureAccess()
-        
+                        
         var windows = [Window]()
         
         guard let windowsInfo = CGWindowListCopyWindowInfo([.optionOnScreenOnly], 0) else {
