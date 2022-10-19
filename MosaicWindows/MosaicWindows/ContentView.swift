@@ -24,15 +24,13 @@ struct ContentView: View {
             DebugButtons()
         }
         .onAppear() {
-//            viewModel.startTimer()
+            viewModel.startTimer()
             viewModel.updateWindows()
         }
         .onDisappear() {
 //            viewModel.stopTimer()
         }
     }
-    
-    
     
     @ViewBuilder
     private func MosaicViews() -> some View {

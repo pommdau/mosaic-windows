@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Window: Identifiable {
+struct Window: Identifiable, Equatable {
     
     let id: Int  // windowNumber
     var windowAlpha: Int
