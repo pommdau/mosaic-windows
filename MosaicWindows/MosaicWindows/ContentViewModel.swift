@@ -9,6 +9,7 @@ import Foundation
 
 @MainActor
 final class ContentViewModel: ObservableObject {
+    
     @Published var windows: [Window] = []
     private var timer: Timer? = nil
     
@@ -44,11 +45,8 @@ final class ContentViewModel: ObservableObject {
         }
         
         if newWindows == windows {
-            print("no change")
             return
         }
-        
-        print("window changed!")
         windows = newWindows
 //
 //        newWindows.forEach { newWindow in

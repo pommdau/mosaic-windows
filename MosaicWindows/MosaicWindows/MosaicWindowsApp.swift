@@ -9,10 +9,16 @@ import SwiftUI
 
 @main
 struct MosaicWindowsApp: App {
+    
+    @State var mainScreenSize: CGSize = .zero
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .frame(minWidth: 400, minHeight: 200)
+                .frame(width: mainScreenSize.width,
+                       height: mainScreenSize.height)
+                .position(x: mainScreenSize.width / 2,
+                          y: mainScreenSize.height / 2)
                 .navigationTitle("MosaicWindows")
                 .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
                     guard let window = NSApp.mainWindow else {
@@ -23,7 +29,7 @@ struct MosaicWindowsApp: App {
                     window.standardWindowButton(.closeButton)?.isHidden = true
                     window.standardWindowButton(.miniaturizeButton)?.isHidden = true
                     
-//                    window.titleVisibility = .hidden
+                    window.titleVisibility = .hidden
                     window.titlebarAppearsTransparent = true
                     
                     window.level = .screenSaver
@@ -31,9 +37,20 @@ struct MosaicWindowsApp: App {
                     
                     window.isOpaque = true
                     window.hasShadow = false
-//                    window.backgroundColor = NSColor(.blue).withAlphaComponent(0.2)
+//                    window.backgroundColor = NSColor(.blue).withAlphaComponent(0.5)
                     window.backgroundColor = NSColor(.blue).withAlphaComponent(0.01)
                     
+                    for (i, screen) in NSScreen.screens.enumerated() {
+                        if i == 0 {
+                            mainScreenSize = screen.frame.size
+                            window.setContentSize(mainScreenSize)
+//                            window.setFrameOrigin(.init(x: .zero,
+//                                                        y: screen.frame.size.height))
+                            window.setFrameOrigin(.init(x: .zero,
+                                                        y: mainScreenSize.height))
+                            print(mainScreenSize)
+                        }
+                    }
                 }
         }
     }

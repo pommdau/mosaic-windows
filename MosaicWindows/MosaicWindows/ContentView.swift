@@ -20,27 +20,31 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
+//            Color.red.opacity(0.4)
+            
             MosaicViews()
-            DebugButtons()
+//            DebugButtons()
         }
         .onAppear() {
             viewModel.startTimer()
             viewModel.updateWindows()
         }
         .onDisappear() {
-//            viewModel.stopTimer()
+            viewModel.stopTimer()
         }
     }
     
     @ViewBuilder
     private func MosaicViews() -> some View {
-        ForEach(viewModel.windows) { window in
-            let windowBounds = window.windowBounds
-            Rectangle()
-                .foregroundColor(.black.opacity(0.2))
-                .frame(width: windowBounds.width, height: windowBounds.height)
-                .position(.init(x: windowBounds.origin.x + windowBounds.width / 2,
-                                y: windowBounds.origin.y + windowBounds.height / 2 - menuBarHeight * 2))
+        ForEach(viewModel.windows) { window in            
+            if window.windowOwnerName == "CotEditor.app"  {
+                let windowBounds = window.windowBounds
+                Rectangle()
+                    .foregroundColor(.green.opacity(0.8))
+                    .frame(width: windowBounds.width, height: windowBounds.height)
+                    .position(.init(x: windowBounds.origin.x + windowBounds.width / 2,
+                                    y: windowBounds.origin.y + windowBounds.height / 2 - menuBarHeight * 2))
+            }
         }
     }
     
