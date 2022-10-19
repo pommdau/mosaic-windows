@@ -13,7 +13,6 @@
 		DABC537628FE4830003FA4B6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DABC537528FE4830003FA4B6 /* Preview Assets.xcassets */; };
 		DABC538028FE48BF003FA4B6 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABC537F28FE48BF003FA4B6 /* Window.swift */; };
 		DABC538228FE6E8D003FA4B6 /* WindowsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABC538128FE6E8D003FA4B6 /* WindowsManager.swift */; };
-		DABC538528FFBF0A003FA4B6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DABC538428FFBF0A003FA4B6 /* README.md */; };
 		DABC538928FFE34C003FA4B6 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABC538828FFE34C003FA4B6 /* ContentViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -26,7 +25,6 @@
 		DABC537728FE4830003FA4B6 /* MosaicWindows.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MosaicWindows.entitlements; sourceTree = "<group>"; };
 		DABC537F28FE48BF003FA4B6 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		DABC538128FE6E8D003FA4B6 /* WindowsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowsManager.swift; sourceTree = "<group>"; };
-		DABC538428FFBF0A003FA4B6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DABC538828FFE34C003FA4B6 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -44,7 +42,6 @@
 		DABC536228FE482F003FA4B6 = {
 			isa = PBXGroup;
 			children = (
-				DABC538428FFBF0A003FA4B6 /* README.md */,
 				DABC536D28FE482F003FA4B6 /* MosaicWindows */,
 				DABC536C28FE482F003FA4B6 /* Products */,
 			);
@@ -147,7 +144,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DABC538528FFBF0A003FA4B6 /* README.md in Resources */,
 				DABC537628FE4830003FA4B6 /* Preview Assets.xcassets in Resources */,
 				DABC537328FE4830003FA4B6 /* Assets.xcassets in Resources */,
 			);
