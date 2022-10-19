@@ -27,7 +27,7 @@ struct MosaicWindowsApp: App {
                     window.titlebarAppearsTransparent = true
                     
                     window.level = .screenSaver
-                    window.ignoresMouseEvents = true
+//                    window.ignoresMouseEvents = true
                     
                     window.isOpaque = true
                     window.hasShadow = false

@@ -36,11 +36,12 @@ struct WindowsManager {
         return windows
     }
     
-    private func isTarget(withWindow window: Window) -> Bool {
+    private func isTarget(withWindow window: Window) -> Bool {        
         guard
             window.windowAlpha > 0,
             window.windowBounds.width > 10, window.windowBounds.height > 10,
-            window.windowOwnerName == "CotEditor.app",  // Debugging
+//            window.windowOwnerName == "CotEditor.app",  // Debugging
+            (window.windowOwnerName == "CotEditor.app" || window.windowOwnerName == "TweetComment"),  // Debugging
             window.windowOwnerName != "Dock",
             window.windowOwnerName != "Window Server",
             window.windowIsOnscreen
