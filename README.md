@@ -22,3 +22,5 @@ https://user-images.githubusercontent.com/29433103/196655148-45b7c509-99e2-4950-
     - `windows.insert(window, at: windows.endIndex)`のように代入するといい
     - kCGWindowLayerはWindowLevelに相当する。同じ階層にいくつかの値が存在するのでこれだけではZ方向の重なりは決定できない
 - [デスクトップ上にあるウインドウの一覧を取得する](https://qiita.com/usagimaru/items/6ffd09c5b27042281108#105%E4%BB%A5%E9%99%8D%E3%81%A7%E3%81%AF%E3%82%A6%E3%82%A4%E3%83%B3%E3%83%89%E3%82%A6%E3%83%AA%E3%82%B9%E3%83%88%E3%81%B8%E3%81%AE%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%8C%E7%B0%A1%E5%8D%98%E3%81%AB%E3%81%A7%E3%81%8D%E3%82%8B)
+- [How can my app detect a change to another app's window?](https://stackoverflow.com/questions/853833/how-can-my-app-detect-a-change-to-another-apps-window)
+    - `AXUIElementRef`経由でWindowの変更通知を取得できる…かも
